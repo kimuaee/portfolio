@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>시각디자인 포트폴리오</title>
+    <meta
+      name="description"
+      content="시각디자인 작업물 포트폴리오. 커버 → 작업물 그리드 → 상세 보기."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+KR:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#works">작업물로 바로가기</a>
+
+    <header class="topbar" aria-label="상단 내비게이션">
+      <div class="topbar__inner">
+        <a class="brand" href="#top" aria-label="홈으로">
+          <span class="brand__text">PORTFOLIO</span>
+        </a>
+
+        <nav class="nav">
+          <a class="nav__link" href="#works">WORKS</a>
+          <a class="nav__link" href="#contact">CONTACT</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="top" class="main">
+      <section class="cover cover--image" aria-label="표지">
+        <div class="cover__image-wrap">
+          <img
+            class="cover__image"
+            src="./Untitled-1.png"
+            alt="포트폴리오 표지 이미지"
+            decoding="async"
+            loading="eager"
+          />
+        </div>
+
+        <div class="cover__hint" aria-hidden="true">
+          <div class="mouse">
+            <div class="mouse__wheel"></div>
+          </div>
+          <div class="hint-text">아래로 스크롤</div>
+        </div>
+      </section>
+
+      <section id="works" class="works" aria-label="작업물">
+        <div class="grid" id="worksGrid" aria-live="polite"></div>
+      </section>
+
+      <footer id="contact" class="footer" aria-label="연락처">
+        <div class="footer__inner">
+          <div class="footer__left">
+            <h2 class="section-title">CONTACT</h2>
+          </div>
+          <div class="footer__right">
+            <a class="contact-link" href="mailto:yeseoo@sookmyung.ac.kr"
+              >yeseoo@sookmyung.ac.kr</a
+            >
+            <a class="contact-link" href="#" id="instagramLink">Instagram</a>
+            <a class="contact-link" href="#" id="behanceLink">Behance</a>
+          </div>
+        </div>
+        <div class="footer__bottom">
+          <span>© <span id="year"></span> Portfolio</span>
+          <span class="muted">Built with HTML/CSS/JS</span>
+        </div>
+      </footer>
+    </main>
+
+    <div
+      class="modal"
+      id="workModal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modalTitle"
+      aria-describedby="modalDesc"
+      hidden
+    >
+      <div class="modal__backdrop" data-close></div>
+      <div class="modal__panel" role="document">
+        <div class="modal__top">
+          <div class="modal__title-wrap">
+            <div class="modal__kicker" id="modalKicker"></div>
+            <h3 class="modal__title" id="modalTitle">Work</h3>
+          </div>
+          <button class="icon-btn" type="button" data-close aria-label="닫기">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+
+        <div class="modal__body">
+          <div class="gallery" aria-label="작업물 이미지 갤러리">
+            <div class="gallery__main">
+              <button
+                class="gallery__nav gallery__nav--prev"
+                type="button"
+                id="prevImg"
+                aria-label="이전 이미지"
+              >
+                ‹
+              </button>
+              <img id="mainImg" alt="" />
+              <video id="mainVideo" class="gallery__main-video" controls playsinline style="display:none"></video>
+              <button
+                class="gallery__nav gallery__nav--next"
+                type="button"
+                id="nextImg"
+                aria-label="다음 이미지"
+              >
+                ›
+              </button>
+            </div>
+            <div class="gallery__thumbs" id="thumbs"></div>
+          </div>
+
+          <aside class="detail" aria-label="작업물 설명">
+            <div class="detail__meta" id="modalMeta"></div>
+            <div class="detail__desc" id="modalDesc"></div>
+          </aside>
+        </div>
+      </div>
+    </div>
+
+    <script src="./works.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>

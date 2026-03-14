@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>작업물 상세 | 시각디자인 포트폴리오</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+KR:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body class="detail-page-body">
+    <header class="topbar" aria-label="상단 내비게이션">
+      <div class="topbar__inner">
+        <a class="brand" href="./index.html" aria-label="홈으로">
+          <img class="brand__img" src="./arrow.png" alt="목록으로" />
+        </a>
+        <nav class="nav">
+          <a class="nav__link" href="./index.html#works">WORKS</a>
+          <a class="nav__link" href="./index.html#contact">CONTACT</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="main detail-page-main">
+      <div class="detail-page">
+        <div class="detail-page__head">
+          <div class="detail-page__meta" id="detailMeta"></div>
+          <h1 class="detail-page__title" id="detailTitle"></h1>
+          <p class="detail-page__desc" id="detailDesc"></p>
+        </div>
+        <div class="detail-page__media-list" id="detailMediaList"></div>
+      </div>
+    </main>
+
+    <footer id="contact" class="footer" aria-label="연락처">
+      <div class="footer__inner">
+        <div class="footer__left">
+          <h2 class="section-title">CONTACT</h2>
+        </div>
+        <div class="footer__right">
+          <a class="contact-link" href="mailto:yeseoo@sookmyung.ac.kr">yeseoo@sookmyung.ac.kr</a>
+          <a class="contact-link" href="https://www.instagram.com/gimuaee/" target="_blank" rel="noopener noreferrer">Instagram</a>
+          <a class="contact-link" href="#">Behance</a>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <span>© Portfolio</span>
+      </div>
+    </footer>
+
+    <script src="./works.js"></script>
+    <script>
+      (function () {
+        const ALL_WORKS = [...(typeof WORKS !== "undefined" ? WORKS : []), ...(typeof WORKS_UX !== "undefined" ? WORKS_UX : [])];
+        function getWorkById(id) {
+          return ALL_WORKS.find(function (w) { return w.id === id; }) || null;
+        }
+        function escapeHtml(s) {
+          return String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        }
+        function escapeAttr(s) {
+          return String(s ?? "").replace(/"/g, "%22");
+        }
+        function isVideoUrl(url) {
+          if (!url || typeof url !== "string") return false;
+          var u = url.toLowerCase();
+          return u.endsWith(".mp4") || u.endsWith(".webm");
+        }
+        var params = new URLSearchParams(window.location.search);
+        var workId = params.get("work");
+        if (!workId) { window.location.href = "./index.html"; return; }
+        var work = getWorkById(workId);
+        if (!work) { window.location.href = "./index.html"; return; }
+        var displayImages = [work.cover].concat(work.images || []);
+        document.getElementById("detailTitle").textContent = work.title || "작업물";
+        var metaHtml = "";
+        if (work.year) metaHtml += '<span class="meta-pill is-accent">' + escapeHtml(work.year) + "</span>";
+        if (work.role) metaHtml += '<span class="meta-pill">' + escapeHtml(work.role) + "</span>";
+        (work.tags || []).forEach(function (t) { metaHtml += '<span class="meta-pill">' + escapeHtml(t) + "</span>"; });
+        document.getElementById("detailMeta").innerHTML = metaHtml;
+        document.getElementById("detailDesc").textContent = work.description || "";
+        var list = document.getElementById("detailMediaList");
+        var isManualVideo = function (s) { return s && (s.indexOf("manual.mp4") !== -1 || s.indexOf("매뉴얼") !== -1); };
+        list.innerHTML = displayImages.map(function (src) {
+          var videoSrc = escapeAttr(src);
+          var posterAttr = isManualVideo(src) ? ' data-poster-time="5"' : '';
+          if (isVideoUrl(src)) {
+            return '<div class="detail-page__media"><video class="detail-page__video" src="' + videoSrc + '" controls playsinline' + posterAttr + '></video></div>';
+          }
+          return '<div class="detail-page__media"><img class="detail-page__img" src="' + escapeAttr(src) + '" alt="" loading="lazy" /></div>';
+        }).join("");
+
+        list.querySelectorAll("video[data-poster-time]").forEach(function (video) {
+          var t = parseFloat(video.getAttribute("data-poster-time")) || 5;
+          video.addEventListener("loadedmetadata", function () {
+            video.currentTime = t;
+            video.pause();
+          });
+          video.addEventListener("play", function () {
+            if (video.currentTime >= t - 0.5 && video.currentTime <= t + 0.5) {
+              video.currentTime = 0;
+            }
+          }, { once: false });
+        });
+      })();
+    </script>
+  </body>
+</html>
